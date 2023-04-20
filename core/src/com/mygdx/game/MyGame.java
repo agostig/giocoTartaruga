@@ -22,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class MyGame extends ApplicationAdapter {
+public class MyGame extends GameBeta {
 
 	/*private SpriteBatch batch;
 
@@ -44,16 +44,17 @@ public class MyGame extends ApplicationAdapter {
 	private float winMessageX;
 	private float winMessageY;*/
 
-	private Player player;
-	private ActorBeta starfish;
-	private ActorBeta ocean;
+	private Turtle turtle;
+	private Starfish starfish;
+	private SeaBackground ocean;
 	private ActorBeta winMessage;
-
+	private Whirlpool tempWhirlpool;
+	private Fish fish;
 	private boolean win;
 
 
 	//Begin 2.1.
-	private Stage mainStage;
+
 	private Button buttonRight;
 	private Button buttonLeft;
 	private Button buttonTop;
@@ -64,55 +65,29 @@ public class MyGame extends ApplicationAdapter {
 
 
 	@Override
-	public void create()
+	public void initialize()
 	{
 		//Begin 2.1.
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
-		mainStage = new Stage();
+
 		Gdx.input.setInputProcessor(mainStage);
 		//End 2.1.
 
 
-		//https://codeshare.io/K8mpY7
-		/*batch = new SpriteBatch();
 
-		turtleTexture = new Texture( Gdx.files.internal("turtle-1.png") );
-		turtleX = 20;
-		turtleY = 20;
-		turtleRectangle = new Rectangle( turtleX,
-				turtleY,
-				turtleTexture.getWidth(),
-				turtleTexture.getHeight() );
 
-		starfishTexture = new Texture( Gdx.files.internal("starfish.png") );
-		starfishX = 380;
-		starfishY = 380;
-		starfishRectangle = new Rectangle( starfishX, starfishY,
-				starfishTexture.getWidth(), starfishTexture.getHeight() );
+		ocean = new SeaBackground(0, 0,mainStage);
 
-		oceanTexture = new Texture( Gdx.files.internal("water.jpg") );
-		oceanX = 0;
-		oceanY = 0;
+		starfish = new Starfish(380,380, mainStage);
 
-		winMessageTexture = new Texture( Gdx.files.internal("you-win.png") );
-		winMessageX = 180;
-		winMessageY = 180;*/
+		turtle = new Turtle(20,20, mainStage);
 
-		ocean = new ActorBeta();
-		ocean.setTexture( new Texture( Gdx.files.internal("water2.jpg") ) );
-		ocean.setPosition( 0,0 );
-		mainStage.addActor( ocean );
+		tempWhirlpool = new Whirlpool(100, 100, mainStage);
 
-		starfish = new ActorBeta();
-		starfish.setTexture( new Texture(Gdx.files.internal("starfish.png")) );
-		starfish.setPosition( 380,380 );
-		mainStage.addActor( starfish );
+		fish = new Fish(90, 90, mainStage);
 
-		player = new Player();
-		player.setTexture( new Texture(Gdx.files.internal("turtle-1.png")) );
-		player.setPosition( 20,20 );
-		mainStage.addActor( player );
+
 
 		winMessage = new ActorBeta();
 		winMessage.setTexture( new Texture(Gdx.files.internal("you-win.png")) );
@@ -158,7 +133,7 @@ public class MyGame extends ApplicationAdapter {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("#INFO", "Pressed Text Button");
 				//3.5.
-				player.setDirection(Player.RIGHT);
+				turtle.setDirection(Turtle.RIGHT);
 				return true;
 			}
 		});
@@ -176,7 +151,7 @@ public class MyGame extends ApplicationAdapter {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("#INFO", "Pressed Text Button");
 				//3.5.
-				player.setDirection(Player.LEFT);
+				turtle.setDirection(Turtle.LEFT);
 				return true;
 			}
 		});
@@ -194,7 +169,7 @@ public class MyGame extends ApplicationAdapter {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("#INFO", "Pressed Text Button");
 				//3.5.
-				player.setDirection(Player.TOP);
+				turtle.setDirection(Turtle.TOP);
 				return true;
 			}
 		});
@@ -212,7 +187,7 @@ public class MyGame extends ApplicationAdapter {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				Gdx.app.log("#INFO", "Pressed Text Button");
 				//3.5.
-				player.setDirection(Player.BOTTOM);
+				turtle.setDirection(Turtle.BOTTOM);
 				return true;
 			}
 		});
@@ -255,33 +230,15 @@ public class MyGame extends ApplicationAdapter {
 		batch.end();
 
 
-
 		//Begin 2.1.
 		mainStage.draw();
 		//End 2.1.
 	}*/
 
 	@Override
-	public void render()
+	public void update(float dt)
 	{
-		//Begin 3.6.
-		//Check user input.
-		mainStage.act(1/60f);
 
-		//Check win condition: turtle must be overlapping starfish.
-		if(player.overlaps(starfish))
-		{
-			starfish.remove();
-			winMessage.setVisible(true);
-		}
-
-		//Clear screen.
-		Gdx.gl.glClearColor(0,0,0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		//End 3.6.
-
-		//Draw graphics.
-		mainStage.draw();
 	}
 
 	@Override
