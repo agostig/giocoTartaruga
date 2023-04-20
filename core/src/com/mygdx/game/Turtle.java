@@ -13,7 +13,7 @@ public class Turtle extends BaseActor
     public final static int BOTTOM=4;
 
     private int direction=0;
-    private int spostamento=5;
+    private int spostamento=50;
 
     private float deltaT = 0;
 
@@ -22,6 +22,7 @@ public class Turtle extends BaseActor
     {
         super(x,y,s);
 
+
         String[] filenames =
                 {"turtle-1.png", "turtle-2.png", "turtle-3.png",
                         "turtle-4.png", "turtle-5.png", "turtle-6.png"};
@@ -29,9 +30,17 @@ public class Turtle extends BaseActor
         loadAnimationFromFiles(filenames, 0.1f, true);
         //End 2.0.
 
-
+        setBoundaryPolygon(8);
 
         setDirection(Turtle.IDLE);
+
+
+
+        //Begin 3.4.
+        setAcceleration(400);
+        setMaxSpeed(400);
+        setDeceleration(5000);
+        //End 3.4.*/
     }
 
     public void setDirection(int d)
@@ -43,6 +52,9 @@ public class Turtle extends BaseActor
     {
         super.act(dt);
 
+
+        /*
+        //DA USERE NEL GIOCO
         if(direction==Turtle.LEFT)
         {
             this.moveBy(-spostamento, 0);
@@ -71,6 +83,23 @@ public class Turtle extends BaseActor
             this.moveBy(0, -spostamento);
             setDirection(Turtle.IDLE);
         }
+         */
+
+        if(direction==Turtle.LEFT)
+            accelerateAtAngle(180);
+        else if(direction==Turtle.TOP)
+            accelerateAtAngle(90);
+        else if(direction==Turtle.RIGHT)
+            accelerateAtAngle(0);
+        else if(direction==Turtle.BOTTOM)
+            accelerateAtAngle(270);
+
+        applyPhysics(dt);
+
+        setAnimationPaused( !isMoving() );
+
+        if ( getSpeed() > 0 )
+            setRotation( getMotionAngle() );
     }
 }
 
