@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 
 //2.
+
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -45,164 +46,185 @@ public class MyGame extends GameBeta {
 	private float winMessageX;
 	private float winMessageY;*/
 
-	private Turtle turtle;
-	private Starfish starfish;
-	private SeaBackground ocean;
-	private ActorBeta winMessage;
-	private Whirlpool tempWhirlpool;
-	private Fish fish;
-	private boolean win;
+    private Turtle turtle;
+    //private Starfish starfish;
+    private SeaBackground ocean;
+    private ActorBeta winMessage;
+    private Whirlpool tempWhirlpool;
+    //private Rock rock;
+    private Wall wall;
+    private boolean win;
 
 
-	//Begin 2.1.
+    //Begin 2.1.
 
-	private Button buttonRight;
-	private Button buttonLeft;
-	private Button buttonTop;
-	private Button buttonBottom;
-	private TextButton.TextButtonStyle textButtonStyle;
-	//End 2.1.
-
-
-
-	@Override
-	public void initialize()
-	{
-		//Begin 2.1.
-		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+    private Button buttonRight;
+    private Button buttonLeft;
+    private Button buttonTop;
+    private Button buttonBottom;
+    private TextButton.TextButtonStyle textButtonStyle;
+    //End 2.1.
 
 
-		Gdx.input.setInputProcessor(mainStage);
-		//End 2.1.
+    @Override
+    public void initialize() {
+        //Begin 2.1.
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
 
+        Gdx.input.setInputProcessor(mainStage);
+        //End 2.1.
 
 
-		ocean = new SeaBackground(0, 0,mainStage);
+        ocean = new SeaBackground(0, 0, mainStage);
 
-		starfish = new Starfish(380,380, mainStage);
+        //starfish = new Starfish(380,380, mainStage);
 
-		turtle = new Turtle(20,20, mainStage);
+        turtle = new Turtle(20, 20, mainStage);
 
-		tempWhirlpool = new Whirlpool(100, 100, mainStage);
+        //tempWhirlpool = new Whirlpool(100, 100, mainStage);
 
-		fish = new Fish(90, 90, mainStage);
+        //rock = new Rock(200, 200, mainStage);
 
-
-
-		winMessage = new ActorBeta();
-		winMessage.setTexture( new Texture(Gdx.files.internal("you-win.png")) );
-		winMessage.setPosition( 180,180 );
-		winMessage.setVisible( false );
-		mainStage.addActor( winMessage );
-
-		win = false;
+        wall = new Wall(300, 400, mainStage);
 
 
+        new Starfish(400, 400, mainStage);
+        new Starfish(500, 100, mainStage);
+        new Starfish(100, 450, mainStage);
+        new Starfish(200, 250, mainStage);
 
-		//Begin 2.1.
-		FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
+        new Rock(200, 150, mainStage);
+        new Rock(100, 300, mainStage);
+        new Rock(300, 350, mainStage);
+        new Rock(450, 200, mainStage);
 
-		FreeTypeFontGenerator.FreeTypeFontParameter fontParameters = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		fontParameters.size = 48;
-		fontParameters.color = Color.WHITE;
-		fontParameters.borderWidth = 2;
-		fontParameters.borderColor = Color.BLACK;
-		fontParameters.borderStraight = true;
-		fontParameters.minFilter = Texture.TextureFilter.Linear;
-		fontParameters.magFilter = Texture.TextureFilter.Linear;
 
-		BitmapFont customFont = fontGenerator.generateFont(fontParameters);
+        new Wall(800,500,mainStage);
+        new Wall(800,400,mainStage);
+        new Wall(800,300,mainStage);
+        new Wall(800,200,mainStage);
+        new Wall(800,100,mainStage);
+        new Wall(800,0,mainStage);
 
-		textButtonStyle = new TextButton.TextButtonStyle();
-		Texture buttonTex = new Texture( Gdx.files.internal("badlogic.jpg") );
-		NinePatch buttonPatch = new NinePatch(buttonTex, 24,24,24,24);
-		textButtonStyle.up = new NinePatchDrawable( buttonPatch );
-		textButtonStyle.font = customFont;
-		textButtonStyle.fontColor = Color.GRAY;
 
-		buttonRight =  new TextButton( "RIGHT", textButtonStyle );
-		buttonRight.setSize(20*4,50);
-		buttonRight.setPosition(10*7,Gdx.graphics.getHeight()-20*3);
-		//buttonRight.setPosition(10*7,Gdx.graphics.getHeight()*baseHRatio-20*3);
-		buttonRight.addListener(new InputListener(){
-			@Override
-			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				Gdx.app.log("#INFO", "Press a Button");
-				turtle.setDirection(Turtle.IDLE);
-			}
-			@Override
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				Gdx.app.log("#INFO", "Pressed Text Button");
-				//3.5.
-				turtle.setDirection(Turtle.RIGHT);
-				return true;
-			}
-		});
+        winMessage = new ActorBeta();
+        winMessage.setTexture(new Texture(Gdx.files.internal("you-win.png")));
+        winMessage.setPosition(180, 180);
+        winMessage.setVisible(false);
+        mainStage.addActor(winMessage);
 
-		buttonLeft =  new TextButton( "LEFT", textButtonStyle );
-		buttonLeft.setSize(20*4,50);
-		buttonLeft.setPosition(10*7,Gdx.graphics.getHeight()-50*3);
-		//buttonLeft.setPosition(10*7,Gdx.graphics.getHeight()*baseHRatio-50*3);
-		buttonLeft.addListener(new InputListener(){
-			@Override
-			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				Gdx.app.log("#INFO", "Press a Button");
-				turtle.setDirection(Turtle.IDLE);
-			}
-			@Override
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				Gdx.app.log("#INFO", "Pressed Text Button");
-				//3.5.
-				turtle.setDirection(Turtle.LEFT);
-				return true;
-			}
-		});
+        win = false;
 
-		buttonTop =  new TextButton( "TOP", textButtonStyle );
-		buttonTop.setSize(20*4,50);
-		buttonTop.setPosition(10*7,Gdx.graphics.getHeight()-80*3);
-		//buttonTop.setPosition(10*7,Gdx.graphics.getHeight()*baseHRatio-80*3);
-		buttonTop.addListener(new InputListener(){
-			@Override
-			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				Gdx.app.log("#INFO", "Press a Button");
-				turtle.setDirection(Turtle.IDLE);
-			}
-			@Override
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				Gdx.app.log("#INFO", "Pressed Text Button");
-				//3.5.
-				turtle.setDirection(Turtle.TOP);
-				return true;
-			}
-		});
 
-		buttonBottom =  new TextButton( "BOTTOM", textButtonStyle );
-		buttonBottom.setSize(20*4,50);
-		buttonBottom.setPosition(10*7,Gdx.graphics.getHeight()-110*3);
-		//buttonBottom.setPosition(10*7,Gdx.graphics.getHeight()*baseHRatio-110*3);
-		buttonBottom.addListener(new InputListener(){
-			@Override
-			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				Gdx.app.log("#INFO", "Press a Button");
-				turtle.setDirection(Turtle.IDLE);
-			}
-			@Override
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				Gdx.app.log("#INFO", "Pressed Text Button");
-				//3.5.
-				turtle.setDirection(Turtle.BOTTOM);
-				return true;
-			}
-		});
+        //Begin 2.1.
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
 
-		mainStage.addActor(buttonRight);
-		mainStage.addActor(buttonLeft);
-		mainStage.addActor(buttonTop);
-		mainStage.addActor(buttonBottom);
-		//End 2.1.
-	}
+        FreeTypeFontGenerator.FreeTypeFontParameter fontParameters = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        fontParameters.size = 48;
+        fontParameters.color = Color.WHITE;
+        fontParameters.borderWidth = 2;
+        fontParameters.borderColor = Color.BLACK;
+        fontParameters.borderStraight = true;
+        fontParameters.minFilter = Texture.TextureFilter.Linear;
+        fontParameters.magFilter = Texture.TextureFilter.Linear;
+
+        BitmapFont customFont = fontGenerator.generateFont(fontParameters);
+
+        textButtonStyle = new TextButton.TextButtonStyle();
+        Texture buttonTex = new Texture(Gdx.files.internal("badlogic.jpg"));
+        NinePatch buttonPatch = new NinePatch(buttonTex, 24, 24, 24, 24);
+        textButtonStyle.up = new NinePatchDrawable(buttonPatch);
+        textButtonStyle.font = customFont;
+        textButtonStyle.fontColor = Color.GRAY;
+
+        buttonRight = new TextButton("RIGHT", textButtonStyle);
+        buttonRight.setSize(20 * 4, 50);
+        buttonRight.setPosition(10 * 7, Gdx.graphics.getHeight() - 20 * 3);
+        //buttonRight.setPosition(10*7,Gdx.graphics.getHeight()*baseHRatio-20*3);
+        buttonRight.addListener(new InputListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.log("#INFO", "Press a Button");
+                turtle.setDirection(Turtle.IDLE);
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.log("#INFO", "Pressed Text Button");
+                //3.5.
+                turtle.setDirection(Turtle.RIGHT);
+                return true;
+            }
+
+        });
+
+        buttonLeft = new TextButton("LEFT", textButtonStyle);
+        buttonLeft.setSize(20 * 4, 50);
+        buttonLeft.setPosition(10 * 7, Gdx.graphics.getHeight() - 50 * 3);
+        //buttonLeft.setPosition(10*7,Gdx.graphics.getHeight()*baseHRatio-50*3);
+        buttonLeft.addListener(new InputListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.log("#INFO", "Press a Button");
+                turtle.setDirection(Turtle.IDLE);
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.log("#INFO", "Pressed Text Button");
+                //3.5.
+                turtle.setDirection(Turtle.LEFT);
+                return true;
+            }
+        });
+
+        buttonTop = new TextButton("TOP", textButtonStyle);
+        buttonTop.setSize(20 * 4, 50);
+        buttonTop.setPosition(10 * 7, Gdx.graphics.getHeight() - 80 * 3);
+        //buttonTop.setPosition(10*7,Gdx.graphics.getHeight()*baseHRatio-80*3);
+        buttonTop.addListener(new InputListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.log("#INFO", "Press a Button");
+                turtle.setDirection(Turtle.IDLE);
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.log("#INFO", "Pressed Text Button");
+                //3.5.
+                turtle.setDirection(Turtle.TOP);
+                return true;
+            }
+        });
+
+        buttonBottom = new TextButton("BOTTOM", textButtonStyle);
+        buttonBottom.setSize(20 * 4, 50);
+        buttonBottom.setPosition(10 * 7, Gdx.graphics.getHeight() - 110 * 3);
+        //buttonBottom.setPosition(10*7,Gdx.graphics.getHeight()*baseHRatio-110*3);
+        buttonBottom.addListener(new InputListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.log("#INFO", "Press a Button");
+                turtle.setDirection(Turtle.IDLE);
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.log("#INFO", "Pressed Text Button");
+                //3.5.
+                turtle.setDirection(Turtle.BOTTOM);
+                return true;
+            }
+        });
+
+        mainStage.addActor(buttonRight);
+        mainStage.addActor(buttonLeft);
+        mainStage.addActor(buttonTop);
+        mainStage.addActor(buttonBottom);
+        //End 2.1.
+    }
 
 	/*@Override
 	public void render()
@@ -240,32 +262,66 @@ public class MyGame extends GameBeta {
 		//End 2.1.
 	}*/
 
-	@Override
-	public void update(float dt)
-	{
-		//Begin 2.1.
-		if(turtle.overlaps(starfish) && !starfish.isCollected() )
-		{
-			Gdx.app.log("#INFO", "collision detected.");
+    @Override
+    public void update(float dt) {
+		//Begin 1.8.
+		//turtle.preventOverlap(rock);
+  		/*rock.preventOverlap(turtle);
 
-			starfish.collect();
+  		if(turtle.overlaps(starfish) && !starfish.isCollected() )
+  		{
+    		Gdx.app.log("#INFO", "collision detected.");
 
-			Whirlpool whirl = new Whirlpool(0,0, mainStage);
-			whirl.centerAtActor( starfish );
-			//whirl.setOpacity(0.25f);
-			BaseActor youWinMessage = new BaseActor(0,0,mainStage);
-			youWinMessage.loadTexture("you-win.png");
-			youWinMessage.centerAtPosition(400,300);
-			youWinMessage.setOpacity(0);
-			youWinMessage.addAction( Actions.delay(1) );
-			youWinMessage.addAction( Actions.after( Actions.fadeIn(1) ) );
-		}
-		//End 2.1.
-	}
+    starfish.collect();
 
-	@Override
-	public void dispose () {
+    Whirlpool whirl = new Whirlpool(0, 0, mainStage);
+    whirl.centerAtActor( starfish );
+    whirl.setOpacity(0.25f);
+    BaseActor youWinMessage = new BaseActor(0, 0, mainStage);
+    youWinMessage.loadTexture("you-win.png");
+    youWinMessage.centerAtPosition(400, 300);
+    youWinMessage.setOpacity(0);
+    youWinMessage.addAction( Actions.delay(1) );
+    youWinMessage.addAction( Actions.after( Actions.fadeIn(1) ) );
+  }*/
 
-	}
+        for (BaseActor rockActor : BaseActor.getList(mainStage, "Rock"))
+            turtle.preventOverlap(rockActor);
+
+        for(BaseActor wallActor : BaseActor.getList(mainStage, "Wall"))
+            turtle.preventOverlap(wallActor);
+
+        for (BaseActor starfishActor : BaseActor.getList(mainStage, "Starfish")) {
+            Starfish starfish = (Starfish) starfishActor;
+
+            if (turtle.overlaps(starfish) && !starfish.isCollected()) {
+                starfish.collect();
+      /*collected = true;
+      starfish.clearActions();
+      starfish.addAction( Actions.fadeOut(1) );
+      starfish.addAction( Actions.after( Actions.removeActor() ) );*/
+                Whirlpool whirl = new Whirlpool(0, 0, mainStage);
+                whirl.centerAtActor(starfish);
+                whirl.setOpacity(0.25f);
+            }
+        }
+
+        if (BaseActor.count(mainStage, "Starfish") == 0 && !win) {
+            win = true;
+
+            BaseActor youWinMessage = new BaseActor(0, 0, mainStage);
+            youWinMessage.loadTexture("you-win.png");
+            youWinMessage.centerAtPosition(400, 300);
+            youWinMessage.setOpacity(0);
+            youWinMessage.addAction(Actions.delay(1));
+            youWinMessage.addAction(Actions.after(Actions.fadeIn(1)));
+        }
+        //End 1.8.
+    }
+
+    @Override
+    public void dispose() {
+    }
+
 }
 

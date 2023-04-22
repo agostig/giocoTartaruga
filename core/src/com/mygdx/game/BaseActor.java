@@ -3,6 +3,8 @@ package com.mygdx.game;
 //Begin 1.0.
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Intersector.MinimumTranslationVector;
+import java.util.ArrayList;
 //End 1.0.
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -80,6 +82,8 @@ public class BaseActor extends Actor
         //End 3.1.
     }
 
+
+    //Creare diverse timeline e richiamare setAnimation diverse volte
     public void setAnimation(Animation<TextureRegion> anim)
     {
         animation = anim;
@@ -88,7 +92,6 @@ public class BaseActor extends Actor
         float h = tr.getRegionHeight();
         setSize( w, h );
         setOrigin( w/2, h/2 );
-
 
 
         //Begin 1.2.
@@ -385,5 +388,70 @@ public class BaseActor extends Actor
     public void setOpacity(float opacity) {
         this.getColor().a = opacity;
     }
+
+    //Begin 1.1.
+    public Vector2 preventOverlap(BaseActor other)
+    {
+        Polygon poly1 = this.getBoundaryPolygon();
+        Polygon poly2 = other.getBoundaryPolygon();
+
+        //Initial test to improve performance
+        if (!poly1.getBoundingRectangle().overlaps(poly2.getBoundingRectangle()))
+            return null;
+
+        MinimumTranslationVector mtv = new MinimumTranslationVector();
+        boolean polygonOverlap = Intersector.overlapConvexPolygons(poly1, poly2, mtv);
+
+        if (!polygonOverlap)
+            return null;
+
+        this.moveBy(mtv.normal.x * mtv.depth, mtv.normal.y * mtv.depth);
+
+        return mtv.normal;
+    }
+//End 1.1.
+
+
+    public static ArrayList<BaseActor> getList(Stage stage, String className)
+    {
+        ArrayList<BaseActor> list = new ArrayList<BaseActor>();
+
+        className="com.mygdx.game."+className;
+        //Gdx.app.log("#CLASSNAME", className);
+        Class theClass = null;
+
+        try
+        {
+            theClass = Class.forName(className);
+        }
+        catch(Exception error)
+        {
+            Gdx.app.log("#ERRORE", error.toString());
+
+            error.printStackTrace();
+        }
+
+        //Gdx.app.log("#CLASS", theClass.toString());
+        for(Actor a : stage.getActors())
+        {
+            if( theClass.isInstance( a ) ) {
+                //Gdx.app.log("#CLASS", theClass.toString());
+                //Gdx.app.log("#ACTOR", a.toString());
+                list.add((BaseActor) a);
+            }
+        }
+
+        return list;
+    }
+//End 1.1.
+
+
+
+    //Begin 1.2.
+    public static int count(Stage stage, String className)
+    {
+        return getList(stage, className).size();
+    }
+//End 1.2.
 
 }
